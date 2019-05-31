@@ -1,5 +1,6 @@
 from copy import deepcopy
 
+
 def graph_from_file():
     graph = {chr(x): set() for x in range(ord('A'), ord('A')+26)}
     with open('../inputs.txt') as f:
@@ -34,8 +35,6 @@ def stable_topo_path(graph):
     return path
 
 
-
-
 def time_count(graph):
     _graph = deepcopy(graph)
     time_count = 0
@@ -48,10 +47,10 @@ def time_count(graph):
                 break
             if task not in on_doing:
                 on_doing[task] = ord(task) - ord('A') + 61
-            
+
         time_elapsed = min(on_doing.values())
-        time_count += time_elapsed      
-        
+        time_count += time_elapsed
+
         for task in list(on_doing.keys()):
             if on_doing[task] == time_elapsed:
                 on_doing.pop(task)
@@ -59,10 +58,9 @@ def time_count(graph):
                 for key in _graph:
                     _graph[key].discard(task)
             else:
-                on_doing[task] = on_doing[task] - time_elapsed    
+                on_doing[task] = on_doing[task] - time_elapsed
     return time_count
 
-            
 
 graph = graph_from_file()
 print(stable_topo_path(graph))
