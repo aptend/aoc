@@ -1,5 +1,6 @@
 from copy import deepcopy
 
+
 def area_from_file():
     with open('../inputs.txt') as f:
         return area_from_string(f.read())
@@ -12,9 +13,11 @@ def area_from_string(s):
             continue
         area.append(list(line))
     return area
-    
 
-DIRECTIONS = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
+
+DIRECTIONS = [(-1, -1), (-1, 0), (-1, 1), (0, -1),
+              (0, 1), (1, -1), (1, 0), (1, 1)]
+
 
 def run(area):
     m, n = len(area), len(area[0])
@@ -41,9 +44,9 @@ def run(area):
                 elif here == '|' and _lumberyard >= 3:
                     next_round[i][j] = '#'
                 elif here == '#' and (_lumberyard == 0 or _wood == 0):
-                    next_round[i][j] ='.'
+                    next_round[i][j] = '.'
         area = next_round
-       
+
         wood = 0
         lumberyard = 0
         for row in area:
@@ -52,7 +55,8 @@ def run(area):
                     wood += 1
                 elif ch == '#':
                     lumberyard += 1
-        print(wood* lumberyard, r)
+        print(wood * lumberyard, r)
+
 
 example = """\
 .#.#...|#.
@@ -105,4 +109,3 @@ run(area_from_file())
 # 77361 532
 # 76874 533
 # 77315 534
-

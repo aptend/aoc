@@ -97,7 +97,7 @@ def max_level(board):
     (90, 269, 16)
     >>> max_level(level_board(300, 300, 42))
     (232, 251, 12)
-    """    
+    """
     acc_board = accum_board(board)
     for row in acc_board:
         row.append(0)
@@ -111,11 +111,12 @@ def max_level(board):
                 level = (acc_board[i+k][j+k] +
                          acc_board[i-1][j-1] -
                          acc_board[i-1][j+k] -
-                         acc_board[i+k][j-1])               
+                         acc_board[i+k][j-1])
                 if level > max_level_sum:
                     max_level_sum = level
                     top_left = (j+1, i+1, k+1)
     return top_left
+
 
 print(max_level_3x3(level_board(300, 300, 7857)))
 print(max_level(level_board(300, 300, 7857)))

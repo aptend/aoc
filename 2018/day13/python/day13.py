@@ -81,7 +81,7 @@ class Cart:
             self.make_a_turn(next(self.turns))
         elif rail in '-|':
             pass
-        else:        
+        else:
             print(self.history)
             raise IndexError(self.position)
         self.history.append((self.symbol, rail, self.position))

@@ -2,6 +2,7 @@ from collections import namedtuple
 
 State = namedtuple('State', 'content origin')
 
+
 def rules_from_file():
     """
     return  
@@ -68,16 +69,18 @@ def foresee(state, live_patterns, generations):
     State(content='...#....##....#####...#######....#.#..##..', origin=5)
     """
     s = state
-    for i in range(generations):
+    for _ in range(generations):
         s = grow(padding_state(s), live_patterns)
     return s
+
 
 def count_plant_pots(state):
     """
     >>> count_plant_pots(State('.#....##....#####...#######....#.#..##.', 3))
     325
-    """    
+    """
     return sum(i-state.origin for i, c in enumerate(state.content) if c == '#')
+
 
 state, live_patterns = rules_from_file()
 print(count_plant_pots(foresee(state, live_patterns, 20)))
