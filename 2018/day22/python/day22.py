@@ -48,16 +48,24 @@ class Graph:
     def add_edge(self, edge):
         self.adj[edge.src].append(edge)
 
-# 0 torch gear
-# 1 gear neither
-# 2 torch neither
+# 0: rocky  [torch gear]
+# 1: wet    [gear neither]
+# 2: narrow [torch neither]
 
+
+# delta[0][1] means 
+# (rocky[0] -> wet[0], # rocky with torch -> wet with gear
+#  rocky[0] -> wet[1],
+#  rocky[1] -> wet[0],
+#  rocky[1] -> wet[1])
 
 deltas = [
-    [(1, 8, 8, 1), (8, 8, 1, 8), (1, 8, 8, 8)],
-    [(8, 1, 8, 8), (1, 8, 8, 1), (8, 8, 8, 1)],
-    [(1, 8, 8, 8), (8, 8, 8, 1), (1, 8, 8, 1)],
+    [(1, None, None, 1), (None, None, 1, None), (1, None, None, None)],
+    [(None, 1, None, None), (1, None, None, 1), (None, None, None, 1)],
+    [(1, None, None, None), (None, None, None, 1), (1, None, None, 1)],
 ]
+edge_order = [(0, 0), (0, 1), (1, 0), (1, 1)]
+directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 
 g = Graph(pm * pn * 2)
 for i in range(pn):
@@ -66,19 +74,21 @@ for i in range(pn):
         src_type = cave[i][j]
         g.add_edge(Edge(src, src+1, 7))
         g.add_edge(Edge(src+1, src, 7))
-        for di, dj in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+        for di, dj in directions:
             ni, nj = i + di, j + dj
             if not (-1 < ni < pn and -1 < nj < pm):
                 continue
             to = (ni * pm + nj) * 2
             to_type = cave[ni][nj]
             delta = deltas[src_type][to_type]
-            g.add_edge(Edge(src, to, delta[0]))
-            g.add_edge(Edge(src, to+1, delta[1]))
-            g.add_edge(Edge(src+1, to, delta[2]))
-            g.add_edge(Edge(src+1, to+1, delta[3]))
+            for idx, weight in enumerate(delta):
+                if weight is None:
+                    continue
+                d1, d2 = edge_order[idx]
+                g.add_edge(Edge(src+d1, to+d2, weight))
 
-
+# import sys
+# sys.exit(0)
 def whereami(x):
     order, tool = divmod(x, 2)
     i, j = divmod(order, pm)
@@ -112,5 +122,5 @@ def sp(g):
                 edge_to[w] = v
                 heappush(heap, (dist_to[w], w))
 
-
-print(sp(g))
+steps, path = sp(g)
+print(steps)
