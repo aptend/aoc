@@ -20,9 +20,9 @@ def travel(ins):
     """
     i = 0
     x, y = 0, 0
-    stack = [(x, y)]
+    stack = [(x, y)]  # 岔路点
     n_forks = 0
-    forks_stack = [n_forks]
+    forks_stack = [n_forks]  # 当前路径的备选分支个数
     steps = 0
     rooms = {(x, y): steps}
     farest = 0
@@ -34,24 +34,25 @@ def travel(ins):
             forks_stack.append(n_forks)
             n_forks = 0
         elif ch == '|':
-            if ins[i+1] == ')':
+            if ins[i+1] == ')':  # 遇到原路返回型岔路，备选+1，回到(开始处
                 i += 1
                 x, y = stack.pop()
                 n_forks = forks_stack.pop()
                 steps = rooms[(x, y)]
-            else:
+            else:                # 当前点入栈，因为平行空间可能在此基础上继续。
+                                 # 备选+1，回到(开始处
                 stack.append((x, y))
                 n_forks += 1
                 x, y = stack[-1 - n_forks]
                 steps = rooms[(x, y)]
         elif ch == ')':
-            for _ in range(n_forks):
+            for _ in range(n_forks):   # 在最长岔路基础上继续
                 fork = stack.pop()
                 if rooms[fork] > steps:
                     x, y = fork
                     steps = rooms[fork]
-            stack.pop()
-            n_forks = forks_stack.pop()
+            stack.pop()                  # 抛弃原始(开始处
+            n_forks = forks_stack.pop()  # 回到上层的岔路计数
         else:
             if ch == 'E':
                 x += 1
